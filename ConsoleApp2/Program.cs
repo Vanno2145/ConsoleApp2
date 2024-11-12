@@ -2,205 +2,314 @@
 
 class Program
 {
-    public class Matrix
+
+   public abstract class Device
     {
-        private int[,] matrix;
+        virtual public void Sound() { }
+        virtual public void Show() { }
+        virtual public void Desc() { }
+    }
 
-        public Matrix(int rows, int columns)
+    class Car : Device
+    {
+        public string name { get; set; }
+        public string description { get; set; }
+
+        public Car()
         {
-            matrix = new int[rows, columns];
+            name = string.Empty;
+            description = string.Empty;
+        }
+        public Car(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
         }
 
-        public int Rows { get { return matrix.GetLength(0); } }
-        public int Columns { get { return matrix.GetLength(1); } }
-
-        public int this[int row, int col]
+        public override void Sound()
         {
-            get { return matrix[row, col]; }
-            set { matrix[row, col] = value; }
+            Console.WriteLine("Car!");
+        }
+        public override void Show()
+        {
+            Console.WriteLine(name);
+        }
+        public override void Desc()
+        {
+            Console.WriteLine(description);
         }
 
-        public void Input()
+    }
+
+    class Kettle : Device
+    {
+        public string name { get; set; }
+        public string description { get; set; }
+
+        public Kettle()
         {
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    Console.Write($"Введите елемент [{i}, {j}]: ");
-                    matrix[i, j] = int.Parse(Console.ReadLine());
-                }
-            }
+            name = string.Empty;
+            description = string.Empty;
+        }
+        public Kettle(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
         }
 
-        public void PrintMatrix()
+        public override void Sound()
         {
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    Console.Write($"{matrix[i, j]}\t");
-                }
-                Console.WriteLine();
-            }
+            Console.WriteLine("Kettle!");
         }
-        
-        public int FindMaxElement()
+        public override void Show()
         {
-            int max = matrix[0, 0];
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    if (matrix[i, j] > max)
-                    {
-                        max = matrix[i, j];
-                    }
-                }
-            }
-            return max;
+            Console.WriteLine(name);
+        }
+        public override void Desc()
+        {
+            Console.WriteLine(description);
         }
 
-        public int FindMinElement()
+    }
+
+    class Microwave : Device
+    {
+        public string name { get; set; }
+        public string description { get; set; }
+
+        public Microwave()
         {
-            int min = matrix[0, 0];
-            for (int i = 0; i < Rows; i++)
-            {
-                for (int j = 0; j < Columns; j++)
-                {
-                    if (matrix[i, j] < min)
-                    {
-                        min = matrix[i, j];
-                    }
-                }
-            }
-            return min;
+            name = string.Empty;
+            description = string.Empty;
+        }
+        public Microwave(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
         }
 
-        public static Matrix operator +(Matrix a, Matrix b)
+        public override void Sound()
         {
-            if (a.Rows != b.Rows || a.Columns != b.Columns)
-            {
-                throw new ArgumentException("Для сложения матрицы должны иметь одинаковые размеры");
-            }
-
-            Matrix result = new Matrix(a.Rows, a.Columns);
-            for (int i = 0; i < a.Rows; i++)
-            {
-                for (int j = 0; j < a.Columns; j++)
-                {
-                    result[i, j] = a[i, j] + b[i, j];
-                }
-            }
-            return result;
+            Console.WriteLine("Microwave!");
         }
-        public static Matrix operator -(Matrix a, Matrix b)
+        public override void Show()
         {
-            if (a.Rows != b.Rows || a.Columns != b.Columns)
-            {
-                throw new ArgumentException("Для сложения матрицы должны иметь одинаковые размеры");
-            }
-
-            Matrix result = new Matrix(a.Rows, a.Columns);
-            for (int i = 0; i < a.Rows; i++)
-            {
-                for (int j = 0; j < a.Columns; j++)
-                {
-                    result[i, j] = a[i, j] - b[i, j];
-                }
-            }
-            return result;
+            Console.WriteLine(name);
         }
-        public static Matrix operator *(Matrix a, Matrix b)
+        public override void Desc()
         {
-            if (a.Rows != b.Rows || a.Columns != b.Columns)
-            {
-                throw new ArgumentException("Для сложения матрицы должны иметь одинаковые размеры");
-            }
-
-            Matrix result = new Matrix(a.Rows, a.Columns);
-            for (int i = 0; i < a.Rows; i++)
-            {
-                for (int j = 0; j < a.Columns; j++)
-                {
-                    result[i, j] = a[i, j] * b[i, j];
-                }
-            }
-            return result;
-        }
-        public static string operator ==(Matrix a, Matrix b)
-        {
-            if (a.Rows != b.Rows || a.Columns != b.Columns)
-            {
-                throw new ArgumentException("Матрицы разные");
-            }
-
-            Matrix result = new Matrix(a.Rows, a.Columns);
-            int c = -1;
-            for (int i = 0; i < a.Rows; i++)
-            {
-                for (int j = 0; j < a.Columns; j++)
-                {
-                    if (a[i, j] == b[i, j])
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        c = 1;
-                        throw new ArgumentException("Матрицы разные");
-                    }
-                }
-            }
-            if (c == -1)
-            {
-                return "Матрицы равны";
-            }
-            else
-            {
-                throw new ArgumentException("Матрицы разные");
-            }
-          
-        }
-        public static string operator !=(Matrix a, Matrix b)
-        {
-            if (a.Rows != b.Rows || a.Columns != b.Columns)
-            {
-                Console.WriteLine("Матрицы разные");
-            }
-
-            Matrix result = new Matrix(a.Rows, a.Columns);
-            int c = -1;
-            for (int i = 0; i < a.Rows; i++)
-            {
-                for (int j = 0; j < a.Columns; j++)
-                {
-                    if (a[i, j] == b[i, j])
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        c = 1;
-                        throw new ArgumentException("Матрицы разные");
-                    }
-                }
-            }
-            if (c == -1)
-            {
-                return"Матрицы равны";
-            }
-            else
-            {
-                throw new ArgumentException("Матрицы разные");
-            }
-
+            Console.WriteLine(description);
         }
     }
 
+    class Steamboat : Device
+    {
+        public string name { get; set; }
+        public string description { get; set; }
+
+        public Steamboat()
+        {
+            name = string.Empty;
+            description = string.Empty;
+        }
+        public Steamboat(string name, string description)
+        {
+            this.name = name;
+            this.description = description;
+        }
+
+        public override void Sound()
+        {
+            Console.WriteLine("Steamboat!");
+        }
+        public override void Show()
+        {
+            Console.WriteLine(name);
+        }
+        public override void Desc()
+        {
+            Console.WriteLine(description);
+        }
+    }
+
+    public abstract class MusicalInstrument
+    {
+        public abstract void Sound();
+        public abstract void Show();
+        public abstract void Desc();
+        public abstract void History();
+    }
+
+    class Violin : MusicalInstrument
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public Violin(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public override void Sound()
+        {
+            Console.WriteLine("Violin sound!");
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine(Name);
+        }
+
+        public override void Desc()
+        {
+            Console.WriteLine(Description);
+        }
+
+        public override void History()
+        {
+            Console.WriteLine("The violin has a history dating back to the 16th century in Italy.");
+        }
+    }
+
+    class Trombone : MusicalInstrument
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public Trombone(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public override void Sound()
+        {
+            Console.WriteLine("Trombone sound!");
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine(Name);
+        }
+
+        public override void Desc()
+        {
+            Console.WriteLine(Description);
+        }
+
+        public override void History()
+        {
+            Console.WriteLine("The trombone was developed in the 15th century and is part of the brass family.");
+        }
+    }
+
+    class Ukulele : MusicalInstrument
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public Ukulele(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public override void Sound()
+        {
+            Console.WriteLine("Ukulele sound!");
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine(Name);
+        }
+
+        public override void Desc()
+        {
+            Console.WriteLine(Description);
+        }
+
+        public override void History()
+        {
+            Console.WriteLine("The ukulele originated in Hawaii in the 19th century, based on Portuguese instruments.");
+        }
+    }
+
+    class Cello : MusicalInstrument
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
+        public Cello(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public override void Sound()
+        {
+            Console.WriteLine("Cello sound!");
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine(Name);
+        }
+
+        public override void Desc()
+        {
+            Console.WriteLine(Description);
+        }
+
+        public override void History()
+        {
+            Console.WriteLine("The cello was developed in the early 16th century in Italy and is a member of the violin family.");
+        }
+    }
+
+    public abstract class Worker
+    {
+        public abstract void Print();
+    }
+
+    class President : Worker
+    {
+        public override void Print()
+        {
+            Console.WriteLine("President: Responsible for overseeing the entire organization.");
+        }
+    }
+
+    class Security : Worker
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Security: Ensures the safety and security of the organization and its employees.");
+        }
+    }
+
+    class Manager : Worker
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Manager: Manages teams and coordinates projects within the organization.");
+        }
+    }
+
+    class Engineer : Worker
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Engineer: Responsible for technical and engineering tasks within the organization.");
+        }
+    }
+
+
     static void Main(string[] args)
     {
-
-    }       
+        
+    }    
 }
 
 
