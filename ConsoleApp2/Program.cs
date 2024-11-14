@@ -1,311 +1,70 @@
 ﻿using System;
-
+using System.Collections;
+using System.Collections.Generic;
 class Program
 {
-
-   public abstract class Device
+    public class Book : IComparable<Book>, IComparer<Book>, ICloneable
     {
-        virtual public void Sound() { }
-        virtual public void Show() { }
-        virtual public void Desc() { }
-    }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int Year { get; set; }
+        public double Price { get; set; }
 
-    class Car : Device
-    {
-        public string name { get; set; }
-        public string description { get; set; }
+        public Book() { }  
 
-        public Car()
+        public Book(string title, string author, int year, double price)
         {
-            name = string.Empty;
-            description = string.Empty;
-        }
-        public Car(string name, string description)
-        {
-            this.name = name;
-            this.description = description;
+            Title = title;
+            Author = author;
+            Year = year;
+            Price = price;
         }
 
-        public override void Sound()
+        public int CompareTo(Book other)
         {
-            Console.WriteLine("Car!");
+            return string.Compare(this.Title, other.Title);
         }
-        public override void Show()
+  
+        public int Compare(Book x, Book y)
         {
-            Console.WriteLine(name);
-        }
-        public override void Desc()
-        {
-            Console.WriteLine(description);
+            return x.Price.CompareTo(y.Price);
         }
 
-    }
-
-    class Kettle : Device
-    {
-        public string name { get; set; }
-        public string description { get; set; }
-
-        public Kettle()
+        public object Clone()
         {
-            name = string.Empty;
-            description = string.Empty;
-        }
-        public Kettle(string name, string description)
-        {
-            this.name = name;
-            this.description = description;
+            return new Book(this.Title, this.Author, this.Year, this.Price);
         }
 
-        public override void Sound()
+        public override string ToString()
         {
-            Console.WriteLine("Kettle!");
-        }
-        public override void Show()
-        {
-            Console.WriteLine(name);
-        }
-        public override void Desc()
-        {
-            Console.WriteLine(description);
-        }
-
-    }
-
-    class Microwave : Device
-    {
-        public string name { get; set; }
-        public string description { get; set; }
-
-        public Microwave()
-        {
-            name = string.Empty;
-            description = string.Empty;
-        }
-        public Microwave(string name, string description)
-        {
-            this.name = name;
-            this.description = description;
-        }
-
-        public override void Sound()
-        {
-            Console.WriteLine("Microwave!");
-        }
-        public override void Show()
-        {
-            Console.WriteLine(name);
-        }
-        public override void Desc()
-        {
-            Console.WriteLine(description);
+            return $"Title: {Title}, Author: {Author}, Year: {Year}, Price: {Price}";
         }
     }
 
-    class Steamboat : Device
+    public class Library : IEnumerable
     {
-        public string name { get; set; }
-        public string description { get; set; }
+        private Book[] books;
 
-        public Steamboat()
+        public Library(Book[] booksArray)
         {
-            name = string.Empty;
-            description = string.Empty;
-        }
-        public Steamboat(string name, string description)
-        {
-            this.name = name;
-            this.description = description;
+            books = booksArray;
         }
 
-        public override void Sound()
+
+        public IEnumerator<Book> GetEnumerator()
         {
-            Console.WriteLine("Steamboat!");
+            foreach (Book book in books)
+            {
+                yield return book;
+            }
         }
-        public override void Show()
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            Console.WriteLine(name);
+            return GetEnumerator();
         }
-        public override void Desc()
-        {
-            Console.WriteLine(description);
-        }
+
     }
-
-    public abstract class MusicalInstrument
-    {
-        public abstract void Sound();
-        public abstract void Show();
-        public abstract void Desc();
-        public abstract void History();
-    }
-
-    class Violin : MusicalInstrument
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public Violin(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
-
-        public override void Sound()
-        {
-            Console.WriteLine("Violin sound!");
-        }
-
-        public override void Show()
-        {
-            Console.WriteLine(Name);
-        }
-
-        public override void Desc()
-        {
-            Console.WriteLine(Description);
-        }
-
-        public override void History()
-        {
-            Console.WriteLine("The violin has a history dating back to the 16th century in Italy.");
-        }
-    }
-
-    class Trombone : MusicalInstrument
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public Trombone(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
-
-        public override void Sound()
-        {
-            Console.WriteLine("Trombone sound!");
-        }
-
-        public override void Show()
-        {
-            Console.WriteLine(Name);
-        }
-
-        public override void Desc()
-        {
-            Console.WriteLine(Description);
-        }
-
-        public override void History()
-        {
-            Console.WriteLine("The trombone was developed in the 15th century and is part of the brass family.");
-        }
-    }
-
-    class Ukulele : MusicalInstrument
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public Ukulele(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
-
-        public override void Sound()
-        {
-            Console.WriteLine("Ukulele sound!");
-        }
-
-        public override void Show()
-        {
-            Console.WriteLine(Name);
-        }
-
-        public override void Desc()
-        {
-            Console.WriteLine(Description);
-        }
-
-        public override void History()
-        {
-            Console.WriteLine("The ukulele originated in Hawaii in the 19th century, based on Portuguese instruments.");
-        }
-    }
-
-    class Cello : MusicalInstrument
-    {
-        public string Name { get; set; }
-        public string Description { get; set; }
-
-        public Cello(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
-
-        public override void Sound()
-        {
-            Console.WriteLine("Cello sound!");
-        }
-
-        public override void Show()
-        {
-            Console.WriteLine(Name);
-        }
-
-        public override void Desc()
-        {
-            Console.WriteLine(Description);
-        }
-
-        public override void History()
-        {
-            Console.WriteLine("The cello was developed in the early 16th century in Italy and is a member of the violin family.");
-        }
-    }
-
-    public abstract class Worker
-    {
-        public abstract void Print();
-    }
-
-    class President : Worker
-    {
-        public override void Print()
-        {
-            Console.WriteLine("President: Responsible for overseeing the entire organization.");
-        }
-    }
-
-    class Security : Worker
-    {
-        public override void Print()
-        {
-            Console.WriteLine("Security: Ensures the safety and security of the organization and its employees.");
-        }
-    }
-
-    class Manager : Worker
-    {
-        public override void Print()
-        {
-            Console.WriteLine("Manager: Manages teams and coordinates projects within the organization.");
-        }
-    }
-
-    class Engineer : Worker
-    {
-        public override void Print()
-        {
-            Console.WriteLine("Engineer: Responsible for technical and engineering tasks within the organization.");
-        }
-    }
-
-
     static void Main(string[] args)
     {
         
