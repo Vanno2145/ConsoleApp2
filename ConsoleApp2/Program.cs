@@ -1,74 +1,102 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 class Program
 {
-    public class Book : IComparable<Book>, IComparer<Book>, ICloneable
+    public delegate void DisplayInfo();
+    public delegate double CalculateArea(double a, double b);
+    public delegate bool NumberPredicate(int number);
+
+    static void Main()
     {
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public int Year { get; set; }
-        public double Price { get; set; }
+        DisplayInfo displayInfo = ShowCurrentTime;
+        displayInfo += ShowCurrentDate;
+        displayInfo += ShowCurrentDayOfWeek;
 
-        public Book() { }  
-
-        public Book(string title, string author, int year, double price)
-        {
-            Title = title;
-            Author = author;
-            Year = year;
-            Price = price;
-        }
-
-        public int CompareTo(Book other)
-        {
-            return string.Compare(this.Title, other.Title);
-        }
-  
-        public int Compare(Book x, Book y)
-        {
-            return x.Price.CompareTo(y.Price);
-        }
-
-        public object Clone()
-        {
-            return new Book(this.Title, this.Author, this.Year, this.Price);
-        }
-
-        public override string ToString()
-        {
-            return $"Title: {Title}, Author: {Author}, Year: {Year}, Price: {Price}";
-        }
-    }
-
-    public class Library : IEnumerable
-    {
-        private Book[] books;
-
-        public Library(Book[] booksArray)
-        {
-            books = booksArray;
-        }
+        Console.WriteLine("Информация о текущем времени:");
+        displayInfo();
 
 
-        public IEnumerator<Book> GetEnumerator()
-        {
-            foreach (Book book in books)
-            {
-                yield return book;
-            }
-        }
+        int num = 5;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
 
-    }
-    static void Main(string[] args)
-    {
+        NumberPredicate pred = IsEven;
+        pred += IsOdd;
+        pred += IsEazy;
+        pred += IsFibonacci;    
         
-    }    
+        Console.WriteLine($"Число: {num}");
+            
+        foreach (Delegate method in pred.GetInvocationList())
+        {
+            Console.WriteLine($"  {method.Method.Name}: {method.DynamicInvoke(num)}");
+        }
+
+        double lenth = 9, height = 5;
+        CalculateArea calc = CalculateTriangleArea;
+        calc += CalculateRectangleArea;
+
+        foreach (Delegate method in calc.GetInvocationList())
+        {
+            Console.WriteLine($"  {method.Method.Name}: {method.DynamicInvoke(lenth, height)}");
+        }
+    }
+    public static bool IsEven(int number) => number % 2 == 0;
+ 
+    public static bool IsOdd(int number) => number % 2 != 0;
+
+    public static bool IsEazy(int number)
+    {
+        if (number < 2) return false; 
+        for (int i = 2; i * i <= number; i++) 
+        {
+            if (number % i == 0)
+                return false;
+        }
+        return true;
+    }
+
+    public static bool IsFibonacci(int number)
+    {
+        if (number < 0) return false;
+
+        int a = 0;
+        int b = 1;
+
+        while (a <= number)
+        {
+            if (a == number) return true;
+            int temp = a;
+            a = b;
+            b = temp + b;
+        }
+
+        return false;
+    }
+
+    public static void ShowCurrentTime()
+    {
+        Console.WriteLine($"Текущее время: {DateTime.Now.ToString("HH:mm:ss")}");
+    }
+
+    public static void ShowCurrentDate()
+    {
+        Console.WriteLine($"Текущая дата: {DateTime.Now.ToString("yyyy-MM-dd")}");
+    }
+
+    public static void ShowCurrentDayOfWeek()
+    {
+        Console.WriteLine($"Сегодня: {DateTime.Now.DayOfWeek}");
+    }
+
+    public static double CalculateTriangleArea(double baseLength, double height)
+    {
+        return 0.5 * baseLength * height;
+    }
+
+    public static double CalculateRectangleArea(double length, double width)
+    {
+        return length * width;
+    }
 }
-
-
